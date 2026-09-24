@@ -607,3 +607,107 @@ body {
   gap: 10px;
   justify-content: center;
 }
+
+/* settings */
+
+.settings-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.formula-desc {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.form-row {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.form-label {
+  color: var(--muted);
+  flex: none;
+  font-size: 14px;
+  width: 130px;
+}
+
+.slider {
+  accent-color: var(--accent);
+  flex: 1;
+}
+
+.slider-val {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  width: 32px;
+}
+
+.num-input {
+  background: var(--bg);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: var(--text);
+  color-scheme: dark;
+  font-size: 14px;
+  padding: 8px;
+  width: 76px;
+}
+
+.form-error {
+  color: var(--bad);
+  font-size: 13px;
+  padding: 2px 0;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.settings-hint {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.card-2 {
+  background: var(--surface-2);
+  border-radius: 10px;
+  margin-top: 6px;
+  padding: 10px 12px;
+}
+
+.diff-head {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.diff-row {
+  font-size: 13px;
+  padding: 2px 0;
+}
+
+.file-hidden {
+  display: none;
+}
+
+.settings-about {
+  font-size: 12px;
+  text-align: center;
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  height: 18px;
+  width: 18px;
+}
