@@ -10,6 +10,30 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <title>Vested</title>
+    <script>
+      // No backend to report to — surface fatal startup errors on screen.
+      // Capture phase: also catches module/script load failures.
+      window.addEventListener(
+        "error",
+        function (e) {
+          var m =
+            e.message ||
+            (e.target && e.target.src ? "failed to load " + e.target.src : null);
+          if (!m) return;
+          var show = function () {
+            var pre = document.createElement("pre");
+            pre.className = "fatal";
+            pre.style.cssText =
+              "color:#f87171;font-size:13px;padding:16px;white-space:pre-wrap";
+            pre.textContent = "vested failed to start:\n" + m;
+            document.body.append(pre);
+          };
+          if (document.body) show();
+          else document.addEventListener("DOMContentLoaded", show);
+        },
+        true,
+      );
+    </script>
   </head>
   <body>
     <div id="app"></div>
