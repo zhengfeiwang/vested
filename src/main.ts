@@ -1,3 +1,5 @@
 import "./styles.css";
+import { initStore } from "./store";
+import { initApp } from "./ui/app";
 
-document.getElementById("app")!.textContent = "Vested — setting up…";
+void initStore().then(initApp);
