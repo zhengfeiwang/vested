@@ -232,7 +232,7 @@ function entriesSection(week: string): HTMLElement {
   );
 }
 
-function entryRow(entry: ActivityEntry): HTMLElement {
+export function entryRow(entry: ActivityEntry): HTMLElement {
   const row = h(
     "div",
     { class: `entry${entry.minutes < 0 ? " correction" : ""}` },

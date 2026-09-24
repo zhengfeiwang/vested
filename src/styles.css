@@ -445,3 +445,165 @@ body {
   font: inherit;
   font-weight: 700;
 }
+
+/* ledger */
+
+.ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ledger-row {
+  padding: 12px 14px;
+}
+
+.ledger-head {
+  cursor: pointer;
+}
+
+.ledger-top {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+}
+
+.chevron {
+  display: inline-block;
+  width: 14px;
+}
+
+.ledger-week {
+  font-weight: 700;
+}
+
+.ledger-range {
+  font-size: 12px;
+}
+
+.ledger-tag {
+  background: var(--surface-2);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+.ledger-stats {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 10px;
+  margin-top: 4px;
+  padding-left: 22px;
+}
+
+.ledger-fv {
+  margin-left: auto;
+}
+
+.balance-ok {
+  color: var(--good);
+}
+
+.balance-debt {
+  color: var(--bad);
+}
+
+.ledger-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.ledger-detail[hidden] {
+  display: none;
+}
+
+.ledger-empty {
+  font-size: 13px;
+  padding-left: 22px;
+}
+
+/* report */
+
+.chip.active {
+  background: var(--accent);
+  color: #052e16;
+}
+
+.stat-row {
+  align-items: baseline;
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.stat-label {
+  flex: none;
+  font-size: 13px;
+  width: 86px;
+}
+
+.stat-value {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.stat-note {
+  font-size: 12px;
+}
+
+.chart-title {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.chart-toggle {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  gap: 4px;
+}
+
+.chart {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.grid {
+  stroke: #334155;
+  stroke-width: 1;
+}
+
+.axis-label {
+  fill: #94a3b8;
+  font-size: 10px;
+}
+
+.chart-legend {
+  display: flex;
+  font-size: 12px;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.legend-grant {
+  color: #64748b;
+}
+
+.export-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
