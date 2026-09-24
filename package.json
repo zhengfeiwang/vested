@@ -1,0 +1,17 @@
+{
+  "name": "vested",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "You don't get game time. You vest it.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/icons.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  }
+}
