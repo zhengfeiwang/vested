@@ -39,7 +39,7 @@ Full spec with rationale: [docs/prd.md](docs/prd.md).
 
 - Everything lives in **IndexedDB, local to that browser on that device**. No sync in v1.
 - Event-sourced and append-only: entries are truth; the ledger is a derived view recomputed on read, so formula changes recompute history cleanly.
-- Backup is manual and git-friendly: **Settings → Export** produces `entries.jsonl` + `formulas.jsonl` (one record per line, header with `schemaVersion`, deterministic ordering for minimal diffs). Import validates every line, then fully replaces the matching dataset.
+- Backup is manual and git-friendly: **Settings → Export** produces `entries.jsonl` + `formulas.jsonl` (one record per line, header with `schemaVersion`, deterministic ordering for minimal diffs). Import validates every line, then **merges** into (union by `id`/`version`) or **fully replaces** the matching dataset — your choice, with counts shown upfront.
 - The main screen quietly shows "last export: N days ago" once you pass 7 days without a backup.
 
 ## Tech

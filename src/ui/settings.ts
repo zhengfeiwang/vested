@@ -2,6 +2,8 @@ import { describeFormula, validateFormula } from "../formula";
 import {
   currentFormula,
   markExported,
+  mergeEntries,
+  mergeFormulas,
   replaceEntries,
   replaceFormulas,
   saveFormula,
@@ -17,7 +19,7 @@ import {
 import { addWeeks, currentWeek, listWeeks } from "../weeks";
 import { daysSince, fmtWeekLabel } from "../format";
 import type { FormulaConfig, WindowFn } from "../types";
-import { confirmModal, h, openModal, toast } from "./dom";
+import { h, openModal, toast } from "./dom";
 
 export function renderSettings(root: HTMLElement): void {
   root.append(formulaCard(), historyCard(), dataCard(), aboutCard());
@@ -298,7 +300,7 @@ function dataCard(): HTMLElement {
     h(
       "div",
       { class: "muted settings-hint" },
-      "import validates the file, then replaces all matching data on this device. keep exports in git — that is the backup.",
+      "import validates the file, then you choose: merge into this device's data or replace it entirely. keep exports in git — that is the backup.",
     ),
   );
 }
@@ -328,18 +330,59 @@ function handleImport(text: string): void {
     data.kind === "entries"
       ? `${state.entries.length} entries`
       : `${state.formulas.length} formula versions`;
-  confirmModal(
-    `Replace ${data.kind}?`,
-    `File holds ${summary}. This device holds ${current}. Import replaces ALL ${data.kind} on this device — restore from your git backup if that was a mistake.`,
-    "Replace",
-    () => {
-      const done =
-        data.kind === "entries"
-          ? replaceEntries(data.entries)
-          : replaceFormulas(data.formulas);
-      void done.then(() => toast(`${data.kind} imported`));
-    },
-    "danger",
+  const count = data.kind === "entries" ? data.entries.length : data.formulas.length;
+  const toAdd =
+    data.kind === "entries"
+      ? data.entries.filter((e) => !state.entries.some((s) => s.id === e.id))
+          .length
+      : data.formulas.filter(
+          (f) => !state.formulas.some((s) => s.version === f.version),
+        ).length;
+  const runMerge = () =>
+    data.kind === "entries"
+      ? mergeEntries(data.entries)
+      : mergeFormulas(data.formulas);
+  const runReplace = () =>
+    data.kind === "entries"
+      ? replaceEntries(data.entries)
+      : replaceFormulas(data.formulas);
+  openModal(
+    `Import ${data.kind}`,
+    h(
+      "div",
+      {},
+      h(
+        "p",
+        { class: "modal-message" },
+        `File holds ${summary}. This device holds ${current}.`,
+      ),
+      h(
+        "p",
+        { class: "modal-message" },
+        `Merge adds ${toAdd} new and skips ${count - toAdd} already present — existing data is untouched. Replace wipes all ${data.kind} on this device first.`,
+      ),
+    ),
+    [
+      { label: "Cancel", kind: "ghost", onClick: (close) => close() },
+      {
+        label: "Replace all",
+        kind: "danger",
+        onClick: (close) => {
+          close();
+          void runReplace().then(() => toast(`${data.kind} replaced`));
+        },
+      },
+      {
+        label: "Merge",
+        kind: "primary",
+        onClick: (close) => {
+          close();
+          void runMerge().then((r) =>
+            toast(`merged: ${r.added} added, ${r.skipped} already present`),
+          );
+        },
+      },
+    ],
   );
 }
 

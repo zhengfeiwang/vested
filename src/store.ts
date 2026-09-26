@@ -199,6 +199,36 @@ export async function replaceFormulas(
   emit();
 }
 
+// Merge is union by id / version: incoming records already present are
+// skipped, existing data is never touched (docs/prd.md §9 v0.3).
+export async function mergeEntries(
+  entries: ActivityEntry[],
+): Promise<{ added: number; skipped: number }> {
+  const existing = new Set(state.entries.map((e) => e.id));
+  const fresh = entries.filter((e) => !existing.has(e.id));
+  if (fresh.length > 0) {
+    await bulkPut("entries", fresh);
+    state.entries.push(...fresh);
+    sortEntries();
+    emit();
+  }
+  return { added: fresh.length, skipped: entries.length - fresh.length };
+}
+
+export async function mergeFormulas(
+  formulas: FormulaConfig[],
+): Promise<{ added: number; skipped: number }> {
+  const existing = new Set(state.formulas.map((f) => f.version));
+  const fresh = formulas.filter((f) => !existing.has(f.version));
+  if (fresh.length > 0) {
+    await bulkPut("formulas", fresh);
+    state.formulas.push(...fresh);
+    state.formulas.sort((a, b) => a.version - b.version);
+    emit();
+  }
+  return { added: fresh.length, skipped: formulas.length - fresh.length };
+}
+
 export async function markExported(): Promise<void> {
   state.lastExportAt = new Date().toISOString();
   await setMeta("lastExportAt", state.lastExportAt);
