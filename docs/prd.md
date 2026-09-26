@@ -2,7 +2,7 @@
 
 > You don't get game time. You vest it.
 
-- **Status**: Draft v0.2 (keystone decisions recorded; implementation started)
+- **Status**: Draft v0.3 (v1 shipped; dogfooding through W43)
 - **Author**: with Kimi
 - **Date**: 2026-09-24
 
@@ -182,7 +182,7 @@ Two tabs over the same derived data:
 
 - **Formula editor** (structured, per §3): weights, window size + aggregation fn, ceiling, floor. Editing bumps `formula.version` and records `effectiveFrom` — historical weeks keep their original formula; the change applies from the chosen week onward. `effectiveFrom` is constrained to the current week or later (a mid-week edit immediately recomputes the current grant); looking backward is what the report's comparison toggle is for. Validation: weights ≥ 0; `window.weeks` integer 1–12; `floorHours ≥ 0`; `floorHours ≤ ceilingHours` when a ceiling is set.
 - Formula history list (view past versions, diff against current).
-- Export / import of `entries.jsonl` + `formulas.jsonl` (backup to git). Import is **full replace** of the matching dataset: every line is validated first, incoming vs. current stats are shown, and explicit confirmation is required. `lastExportAt` is recorded at each export; the main screen shows a subtle "last export: N days ago" line once it exceeds 7 days.
+- Export / import of `entries.jsonl` + `formulas.jsonl` (backup to git). Import validates every line first, then offers **merge** (union by `id`/`version` — existing data untouched) or **full replace**, with counts shown and explicit confirmation required. `lastExportAt` is recorded at each export; the main screen shows a subtle "last export: N days ago" line once it exceeds 7 days.
 
 ### Tech shape
 
@@ -232,3 +232,11 @@ Deployed as a static site on **GitHub Pages** (served from the project subpath, 
 - **Primary device**: phone, mobile-first; hours rounded to one decimal.
 - **Reports**: 4 / 8 / 12 weeks + all-time ("month" dropped).
 - **Deployment**: GitHub Pages with project-subpath `base`; SW updates never clear IndexedDB; Azure Static Web Apps as fallback.
+
+### v0.3 — 2026-09-26 (post-launch scope rulings)
+
+- **Import gains merge**: import now offers merge (union by `id` / `version`, skipped counts shown) alongside validated full replace. Unblocks the laptop-backup workflow (phone exports → laptop merges → git commit) and makes restores non-destructive. The §5 import line is amended accordingly.
+- **Category meta (user-defined earn/spend types)**: evaluated and deferred. The engine is already category-agnostic; the real cost is UI plus a `schemaVersion` migration. Revive only if dogfooding produces a concrete missing category — most likely "one more category," not full user-defined meta.
+- **Sessions / multi-device sync**: evaluated and deferred. No accounts or server — the non-goal stands. The plausible v2 shape is GitHub-as-backend (PAT + private gist/repo; merge is a trivial union thanks to the append-only model). Revive if merge-import proves insufficient in practice.
+- **i18n (en/zh switch)**: evaluated and deferred until a real second user appears. Pure surface: `t()` dictionaries, `Intl` dates, category display names — no data-model impact. Exported artifacts (CSV/JSONL) stay English.
+- **Feature freeze for dogfooding**: no new features before the W43 review (~2026-10-22). Review agenda: adherence and consumed/grant trends (is the ceiling binding?), weekly variance (does `window.weeks` deserve 2–3?), then open questions Q1/Q4/Q5/Q6 and the deferred items above.
